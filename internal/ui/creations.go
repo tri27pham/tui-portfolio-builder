@@ -2,6 +2,7 @@ package ui
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
@@ -10,10 +11,10 @@ import (
 
 var (
 	creationTitleStyle    = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("255"))
-	creationSelectedStyle = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("39"))
+	creationSelectedStyle = lipgloss.NewStyle().Bold(true).Foreground(accent)
 	creationStackStyle    = lipgloss.NewStyle().Foreground(lipgloss.Color("243"))
 	creationDescStyle     = lipgloss.NewStyle().Foreground(lipgloss.Color("252"))
-	creationCursorStyle   = lipgloss.NewStyle().Foreground(lipgloss.Color("39"))
+	creationCursorStyle   = lipgloss.NewStyle().Foreground(accent)
 )
 
 type Creations struct {
@@ -47,8 +48,14 @@ func (m Creations) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Creations) View() string {
-	var rows []string
-	rows = append(rows, creationStackStyle.Render("select one to learn more ↓"), "")
+	title := "Creations"
+	rows := []string{
+		contactTitleStyle.Render(title),
+		contactRuleStyle.Render(strings.Repeat("─", len(title)+16)),
+		"",
+		creationStackStyle.Render("select one to learn more ↓"),
+		"",
+	}
 
 	for i, item := range Portfolio.Creations {
 		cursor := "  "

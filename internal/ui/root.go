@@ -6,6 +6,7 @@ import (
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/muesli/reflow/wordwrap"
 )
 
 const (
@@ -14,7 +15,6 @@ const (
 	viewFunFacts  = "funfacts"
 	viewContact   = "contact"
 )
-
 
 var navItems = []struct {
 	label string
@@ -32,17 +32,17 @@ var (
 			PaddingRight(2)
 
 	nameArtStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("39")).
+			Foreground(accent).
 			Bold(true)
 
 	// cursor/hovered tab — full bright blue
 	navActiveStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("39")).
+			Foreground(accent).
 			Bold(true)
 
-	// active view when cursor has moved elsewhere — pale blue
+	// active view when cursor has moved elsewhere — dim accent
 	navCurrentStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("68"))
+			Foreground(dim)
 
 	navInactiveStyle = lipgloss.NewStyle().
 				Foreground(lipgloss.Color("243"))
@@ -51,7 +51,7 @@ var (
 			Foreground(lipgloss.Color("243"))
 
 	footerKeyStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("39"))
+			Foreground(accent)
 )
 
 type Root struct {
@@ -125,28 +125,25 @@ func (m Root) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Root) View() string {
-	left := portraitStyle.Render(Portfolio.Portrait)
-
 	footer := m.footer()
-	maxWidth := lipgloss.Width(footer)
-	contentStyle := lipgloss.NewStyle().MaxWidth(maxWidth)
-
-	rightTop := lipgloss.JoinVertical(lipgloss.Left,
-		nameArtStyle.Render(Portfolio.NameArt),
-		contentStyle.Render(m.activeView()),
-	)
-
-	rightBottom := lipgloss.JoinVertical(lipgloss.Left,
-		m.renderNav(),
-		"",
+	left := lipgloss.JoinVertical(lipgloss.Left,
+		portraitStyle.Render(Portfolio.Portrait),
 		footer,
 	)
 
-	// pad between content and footer so footer aligns with bottom of portrait
-	leftHeight := lipgloss.Height(left)
+	rightBottom := m.renderNav()
+	maxWidth := lipgloss.Width(rightBottom)
+
+	rightTop := lipgloss.JoinVertical(lipgloss.Left,
+		nameArtStyle.Render(Portfolio.NameArt),
+		wordwrap.String(m.activeView(), maxWidth),
+	)
+
+	// pad so the nav aligns with the last row of the portrait (not the footer)
+	portraitHeight := lipgloss.Height(portraitStyle.Render(Portfolio.Portrait))
 	topHeight := lipgloss.Height(rightTop)
 	bottomHeight := lipgloss.Height(rightBottom)
-	pad := leftHeight - topHeight - bottomHeight
+	pad := portraitHeight - topHeight - bottomHeight
 	if pad < 1 {
 		pad = 1
 	}
