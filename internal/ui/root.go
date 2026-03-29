@@ -15,41 +15,6 @@ const (
 	viewContact   = "contact"
 )
 
-// Placeholder — replace with output of:
-// ascii-image-converter docs/assets/photo.jpg -W 40 -b -C
-const asciiPortrait = `
-  .  . . . . . . . . . . . . . . . . . ..  .
-  .##########################################.
-  .##########################################.
-  .###                                    ###.
-  .###           ASCII PORTRAIT           ###.
-  .###                                    ###.
-  .###   drop your photo at:              ###.
-  .###   docs/assets/photo.jpg            ###.
-  .###                                    ###.
-  .###   then run:                        ###.
-  .###   ascii-image-converter            ###.
-  .###   docs/assets/photo.jpg            ###.
-  .###   -W 40 -b -C                      ###.
-  .###                                    ###.
-  .###   and paste the output             ###.
-  .###   into asciiPortrait               ###.
-  .###   in internal/ui/root.go           ###.
-  .###                                    ###.
-  .##########################################.
-  .##########################################.
-  .  . . . . . . . . . . . . . . . . . ..  .
-`
-
-// Placeholder name ASCII art — replace with figlet/toilet output or hardcode.
-// Example: figlet -f slant "tri"
-const nameArt = `
-  _        _
- | |_ _ __(_)
- | __| '__| |
- | |_| |  | |
-  \__|_|  |_|
-`
 
 var navItems = []struct {
 	label string
@@ -160,17 +125,21 @@ func (m Root) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Root) View() string {
-	left := portraitStyle.Render(asciiPortrait)
+	left := portraitStyle.Render(Portfolio.Portrait)
+
+	footer := m.footer()
+	maxWidth := lipgloss.Width(footer)
+	contentStyle := lipgloss.NewStyle().MaxWidth(maxWidth)
 
 	rightTop := lipgloss.JoinVertical(lipgloss.Left,
-		nameArtStyle.Render(nameArt),
-		m.activeView(),
+		nameArtStyle.Render(Portfolio.NameArt),
+		contentStyle.Render(m.activeView()),
 	)
 
 	rightBottom := lipgloss.JoinVertical(lipgloss.Left,
 		m.renderNav(),
 		"",
-		m.footer(),
+		footer,
 	)
 
 	// pad between content and footer so footer aligns with bottom of portrait

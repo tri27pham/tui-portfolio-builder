@@ -16,30 +16,6 @@ var (
 	creationCursorStyle   = lipgloss.NewStyle().Foreground(lipgloss.Color("39"))
 )
 
-type creation struct {
-	name  string
-	stack string
-	desc  string
-}
-
-var creationItems = []creation{
-	{
-		name:  "Materi",
-		stack: "TypeScript, React, TipTap/ProseMirror",
-		desc:  "AI-native document editor. Live A4 pagination engine, AI editing features.",
-	},
-	{
-		name:  "Notchpets",
-		stack: "Electron, TypeScript, Swift, Supabase",
-		desc:  "macOS notch companion app. Pixel art pets that live in your MacBook notch.",
-	},
-	{
-		name:  "SSH Portfolio",
-		stack: "Go, Charmbracelet (Wish, Bubbletea, Lip Gloss)",
-		desc:  "This site. Terminal-based portfolio, ssh tri.sh.",
-	},
-}
-
 type Creations struct {
 	cursor   int
 	expanded bool
@@ -59,7 +35,7 @@ func (m Creations) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.expanded = false
 			}
 		case key.Matches(msg, Keys.Down):
-			if m.cursor < len(creationItems)-1 {
+			if m.cursor < len(Portfolio.Creations)-1 {
 				m.cursor++
 				m.expanded = false
 			}
@@ -72,8 +48,9 @@ func (m Creations) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m Creations) View() string {
 	var rows []string
+	rows = append(rows, creationStackStyle.Render("select one to learn more ↓"), "")
 
-	for i, item := range creationItems {
+	for i, item := range Portfolio.Creations {
 		cursor := "  "
 		if i == m.cursor {
 			cursor = creationCursorStyle.Render("▸ ")
@@ -81,9 +58,9 @@ func (m Creations) View() string {
 
 		var title string
 		if i == m.cursor {
-			title = creationSelectedStyle.Render(item.name)
+			title = creationSelectedStyle.Render(item.Name)
 		} else {
-			title = creationTitleStyle.Render(item.name)
+			title = creationTitleStyle.Render(item.Name)
 		}
 
 		row := fmt.Sprintf("%s%s", cursor, title)
@@ -91,8 +68,8 @@ func (m Creations) View() string {
 
 		if i == m.cursor && m.expanded {
 			rows = append(rows,
-				"    "+creationStackStyle.Render(item.stack),
-				"    "+creationDescStyle.Render(item.desc),
+				"    "+creationStackStyle.Render(item.Stack),
+				"    "+creationDescStyle.Render(item.Desc),
 				"",
 			)
 		}
