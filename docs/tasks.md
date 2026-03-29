@@ -1,8 +1,8 @@
 # Tasks
 
 ## Phase 1 — local TUI
-- [ ] go mod init + install deps
-- [ ] root model with view switching
+- [x] go mod init + install deps
+- [x] root model with view switching (stub — full wiring in step 6)
 - [ ] about view (landing/hero with ASCII art portrait left, bio text right)
 - [ ] creations view (scrollable list, enter to expand)
 - [ ] fun facts view
