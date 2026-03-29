@@ -3,11 +3,11 @@
 ## Phase 1 — local TUI
 - [x] go mod init + install deps
 - [x] root model with view switching (stub — full wiring in step 6)
-- [ ] about view (landing/hero with ASCII art portrait left, bio text right)
-- [ ] creations view (scrollable list, enter to expand)
-- [ ] fun facts view
-- [ ] contact view
-- [ ] keybindings + footer on all views
+- [x] about view (landing/hero with ASCII art portrait left, bio text right)
+- [x] creations view (scrollable list, enter to expand)
+- [x] fun facts view
+- [x] contact view
+- [x] keybindings + footer on all views
 - [ ] ASCII art portrait — generate from docs/assets/photo.jpg using ascii-image-converter -W 20 -b -C
 
 ## Phase 2 — SSH server
