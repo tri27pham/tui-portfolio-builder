@@ -1,0 +1,6 @@
+portfolio
+*.local
+.env
+ssh_host_*
+fly.toml.bak
+docs/assets/
