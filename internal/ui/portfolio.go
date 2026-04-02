@@ -19,14 +19,21 @@ type Config struct {
 	// NameArt is the ASCII art name shown above the content area.
 	NameArt string
 
-	// RoleLines are the regular-weight bio lines shown in the About view.
+	// RoleLines are the normal-weight intro paragraphs in the About view.
+	// Each element is one paragraph; long strings wrap automatically.
+	// Inline markdown supported: **bold**  *italic*
 	RoleLines []string
 
-	// CurrentWork are the bold-highlighted lines shown in the About view.
+	// CurrentWork are bold-highlighted paragraphs in the About view.
+	// Each element is one paragraph; long strings wrap automatically.
+	// Inline markdown supported: **bold**  *italic*
 	CurrentWork []string
 
-	// Background are the muted lines (education, location) in the About view.
-	Background []string
+	// BackgroundParas are muted paragraphs (education, context, etc) in the About view.
+	// Each element is one paragraph; long strings wrap automatically.
+	// Rendered in grey by default.
+	// Inline markdown supported: **bold**  *italic*
+	BackgroundParas []string
 
 	// Creations is the list of projects shown in the Creations view.
 	Creations []Creation
@@ -118,11 +125,11 @@ var Portfolio = Config{
 `,
 	// Regenerate with: figlet -f slant "yourname"
 	NameArt: `
-   __       _ 
-  / /______(_)
- / __/ ___/ / 
-/ /_/ /  / /  
-\__/_/  /_/   
+		   __       _ 
+		  / /______(_)
+		 / __/ ___/ / 
+		/ /_/ /  / /  
+		\__/_/  /_/   
               
 `,
 
@@ -130,17 +137,16 @@ var Portfolio = Config{
 	DimColor:    "140",
 
 	RoleLines: []string{
-		"is a Founding Engineer @ Materi AI,",
-		"building AI-native document tooling,",
-		"previously at Fitch Ratings.",
+		"is an ***engineer*** & ***creative*** on the internet,",
+		"building cool things, documenting his 20s",
 	},
 	CurrentWork: []string{
-		"Currently building an AI document editor —",
-		"think Cursor, but for docs.",
+		"Currently he's a ***founding engineer*** at",
+		"***Materi*** where he's building the Cursor for",
+		"knowledge work.",
 	},
-	Background: []string{
-		"MSci Computer Science, King's College London (First Class).",
-		"Based in London.",
+	BackgroundParas: []string{
+		"Previously, Tri studied computer science at King's College London where he",
 	},
 
 	Creations: []Creation{

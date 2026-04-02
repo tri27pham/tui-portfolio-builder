@@ -28,14 +28,14 @@ var navItems = []struct {
 
 var (
 	portraitStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("240")).
+			Foreground(lipgloss.Color("255")).
 			PaddingRight(2)
 
 	nameArtStyle = lipgloss.NewStyle().
 			Foreground(accent).
 			Bold(true)
 
-	// cursor/hovered tab — full bright blue
+	// cursor/hovered tab — full bright blueq
 	navActiveStyle = lipgloss.NewStyle().
 			Foreground(accent).
 			Bold(true)
@@ -59,10 +59,12 @@ type Root struct {
 	navCursor   int
 	width       int
 	height      int
+	navWidth    int
 	about       About
 	creations   Creations
 	funfacts    FunFacts
 	contact     Contact
+	rain        Rain
 }
 
 func NewRoot() Root {
@@ -73,11 +75,12 @@ func NewRoot() Root {
 		creations:   NewCreations(),
 		funfacts:    NewFunFacts(),
 		contact:     NewContact(),
+		rain:        newRain(Portfolio.NameArt),
 	}
 }
 
 func (m Root) Init() tea.Cmd {
-	return nil
+	return m.rain.tickCmd()
 }
 
 func (m Root) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -85,6 +88,8 @@ func (m Root) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		m.width = msg.Width
 		m.height = msg.Height
+		m.navWidth = lipgloss.Width(m.renderNav())
+		m.rain.width = m.navWidth
 		return m, nil
 
 	case tea.KeyMsg:
@@ -113,6 +118,13 @@ func (m Root) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 
+	// rain animation tick
+	if _, ok := msg.(rainTickMsg); ok {
+		updated, cmd := m.rain.update(msg)
+		m.rain = updated
+		return m, cmd
+	}
+
 	// forward remaining messages to the active sub-model
 	switch m.currentView {
 	case viewCreations:
@@ -132,14 +144,17 @@ func (m Root) View() string {
 	)
 
 	rightBottom := m.renderNav()
-	maxWidth := lipgloss.Width(rightBottom)
+	maxWidth := m.navWidth
+	if maxWidth == 0 {
+		maxWidth = lipgloss.Width(rightBottom)
+	}
 
-	rightTop := lipgloss.JoinVertical(lipgloss.Left,
-		nameArtStyle.Render(Portfolio.NameArt),
-		wordwrap.String(m.activeView(), maxWidth),
-	)
+	artLines := nameArtLines(Portfolio.NameArt)
+	nameCanvasH := len(artLines) + 4 // 2 blank lines above + 2 below
 
-	// pad so the nav aligns with the last row of the portrait (not the footer)
+	rightTop := m.rain.render(Portfolio.NameArt, nameCanvasH) + "\n" +
+		wordwrap.String(m.activeView(), maxWidth)
+
 	portraitHeight := lipgloss.Height(portraitStyle.Render(Portfolio.Portrait))
 	topHeight := lipgloss.Height(rightTop)
 	bottomHeight := lipgloss.Height(rightBottom)
@@ -186,7 +201,7 @@ func (m Root) renderNav() string {
 			items = append(items, navInactiveStyle.Render("  "+item.label))
 		}
 	}
-	return items[0] + "   " + items[1] + "   " + items[2] + "   " + items[3]
+	return items[0] + "  " + items[1] + "  " + items[2] + "  " + items[3]
 }
 
 func (m Root) footer() string {
