@@ -177,8 +177,10 @@ func (m Root) activeView() string {
 	case viewAbout:
 		return m.about.View()
 	case viewCreations:
+		m.creations.width = m.navWidth
 		return m.creations.View()
 	case viewFunFacts:
+		m.funfacts.width = m.navWidth
 		return m.funfacts.View()
 	case viewContact:
 		return m.contact.View()

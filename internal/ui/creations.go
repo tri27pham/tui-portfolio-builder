@@ -7,6 +7,7 @@ import (
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/muesli/reflow/wordwrap"
 )
 
 var (
@@ -20,6 +21,7 @@ var (
 type Creations struct {
 	cursor   int
 	expanded bool
+	width    int
 }
 
 func NewCreations() Creations { return Creations{} }
@@ -74,13 +76,28 @@ func (m Creations) View() string {
 		rows = append(rows, row)
 
 		if i == m.cursor && m.expanded {
+			indent := "    "
+			wrapWidth := m.width - len(indent)
+			if wrapWidth < 20 {
+				wrapWidth = 40
+			}
+			Subheading := wordwrap.String(item.Subheading, wrapWidth)
+			desc := wordwrap.String(item.Desc, wrapWidth)
 			rows = append(rows,
-				"    "+creationStackStyle.Render(item.Stack),
-				"    "+creationDescStyle.Render(item.Desc),
+				indentLines(creationStackStyle.Render(Subheading), indent),
+				indentLines(creationDescStyle.Render(desc), indent),
 				"",
 			)
 		}
 	}
 
 	return lipgloss.JoinVertical(lipgloss.Left, rows...)
+}
+
+func indentLines(s, indent string) string {
+	lines := strings.Split(s, "\n")
+	for i, line := range lines {
+		lines[i] = indent + line
+	}
+	return strings.Join(lines, "\n")
 }

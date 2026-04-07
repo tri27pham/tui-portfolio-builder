@@ -19,9 +19,10 @@ interactive TUI. No web frontend.
 - Lint: `go vet ./...`
 
 ## Structure
+- `portfolio/` — user content (the only file someone needs to edit)
 - `internal/ui/` — Bubbletea models and views
 - `internal/server/` — Wish SSH server setup
-- `cmd/` — entrypoint
+- `main.go` — entrypoint
 
 ## Views
 - about      — hero/intro, role, background, current work

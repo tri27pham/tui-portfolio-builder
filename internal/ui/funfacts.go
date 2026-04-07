@@ -5,6 +5,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/muesli/reflow/wordwrap"
 )
 
 var (
@@ -12,7 +13,9 @@ var (
 	factTextStyle   = lipgloss.NewStyle().Foreground(lipgloss.Color("252"))
 )
 
-type FunFacts struct{}
+type FunFacts struct {
+	width int
+}
 
 func NewFunFacts() FunFacts { return FunFacts{} }
 
@@ -27,9 +30,22 @@ func (m FunFacts) View() string {
 		contactRuleStyle.Render(strings.Repeat("─", len(title)+16)),
 		"",
 	}
+	bullet := "◆ "
+	indent := "  "
+	wrapWidth := m.width - len(indent)
+	if wrapWidth < 20 {
+		wrapWidth = 40
+	}
 	for _, f := range Portfolio.Facts {
-		row := factBulletStyle.Render("◆ ") + factTextStyle.Render(f)
-		rows = append(rows, row)
+		wrapped := wordwrap.String(f, wrapWidth)
+		lines := strings.Split(wrapped, "\n")
+		first := factBulletStyle.Render(bullet) + factTextStyle.Render(lines[0])
+		if len(lines) > 1 {
+			for _, line := range lines[1:] {
+				first += "\n" + indent + factTextStyle.Render(line)
+			}
+		}
+		rows = append(rows, first)
 	}
 	return lipgloss.JoinVertical(lipgloss.Left, rows...)
 }
