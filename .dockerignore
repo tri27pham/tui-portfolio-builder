@@ -1,0 +1,9 @@
+# flyctl launch added from .gitignore
+# the compiled binary, not the source directory
+portfolio
+!portfolio/
+**/*.local
+**/.env
+**/ssh_host_*
+**/fly.toml.bak
+**/docs/assets

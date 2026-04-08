@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/tripham/development/tui-portfolio-builder remote -v)",
+      "Bash(gh auth:*)",
+      "Edit(~/.claude/skills/gitswitch/**)",
+      "Bash(git -C /Users/tripham/development/tui-portfolio-builder remote get-url origin)",
+      "Bash(ssh -T github-personal)",
+      "Bash(echo \"EXIT:$?\")"
+    ],
+    "additionalDirectories": [
+      "/Users/tripham/.claude/skills"
+    ]
+  }
+}

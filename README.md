@@ -8,16 +8,13 @@ Built with Go and the [Charmbracelet](https://charm.sh) stack (Bubbletea, Lip Gl
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/tri27pham/tui-portfolio-builder.git
+git clone https://github.com/yourusername/tui-portfolio-builder.git
 cd tui-portfolio-builder
 
 # 2. Edit portfolio/portfolio.go with your own content (see below)
 
-# 3. Run locally
+# 3. Run it
 go run .
-
-# 4. In another terminal, connect via SSH to see it
-ssh localhost -p 2222 -o StrictHostKeyChecking=no
 ```
 
 ## Make it yours
@@ -92,13 +89,42 @@ docs/assets/             <-- place your photo here for ASCII conversion
 
 | Command | What it does |
 |---------|-------------|
-| `go run .` | Run the TUI locally |
-| `ssh localhost -p 2222 -o StrictHostKeyChecking=no` | Connect to it via SSH |
+| `go run .` | Preview the TUI locally in your terminal |
+| `SSH_MODE=1 go run .` | Start as an SSH server on port 2222 |
+| `ssh localhost -p 2222 -o StrictHostKeyChecking=no` | Connect to the local SSH server |
 | `go build -o portfolio .` | Build a single binary |
+| `fly deploy` | Deploy to Fly.io |
 | `go vet ./...` | Lint |
 
 ## Deploy
 
-<!-- TODO: Add deployment instructions (Fly.io setup, fly.toml, custom domain, etc.) -->
+> **Note:** Fly.io requires a payment method (credit/debit card) to deploy, even on the free tier. This app is lightweight enough that it should stay well within the free allowance.
 
-Deployment guide coming soon. This project is designed to run on [Fly.io](https://fly.io) as a single binary with no runtime dependencies.
+```bash
+# 1. Install the Fly CLI
+brew install flyctl
+
+# 2. Sign up or log in
+fly auth signup   # or: fly auth login
+
+# 3. Launch the app (first time only — creates the app on Fly)
+fly launch
+
+# 4. Deploy
+fly deploy
+
+# 5. Connect to your live site
+ssh your-app-name.fly.dev
+```
+
+### Custom domain
+
+To use a custom domain (e.g. `ssh yourdomain.sh`):
+
+```bash
+# Add your domain to Fly
+fly certs add yourdomain.sh
+
+# Then point your domain's DNS A/AAAA records to your Fly app's IP
+fly ips list
+```

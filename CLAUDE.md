@@ -1,7 +1,7 @@
 # SSH Portfolio
 
 ## What this is
-Terminal portfolio site. Users connect via `ssh tri.sh` and get an
+Terminal portfolio site. Users connect via SSH and get an
 interactive TUI. No web frontend.
 
 ## Stack
