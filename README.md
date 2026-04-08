@@ -138,3 +138,9 @@ fly certs add yourdomain.sh
 # Then point your domain's DNS A/AAAA records to your Fly app's IP
 fly ips list
 ```
+
+If you've previously connected to the domain when it pointed elsewhere, SSH will reject the new host key. Clear the old one with:
+
+```bash
+ssh-keygen -R yourdomain.sh
+```
