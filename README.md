@@ -110,13 +110,19 @@ brew install flyctl
 # 2. Sign up or log in
 fly auth signup   # or: fly auth login
 
-# 3. Launch the app (first time only — creates the app on Fly)
-fly launch
+# 3. Create your fly.toml from the template
+cp fly.toml.example fly.toml
 
-# 4. Deploy
+# 4. Edit fly.toml — set your app name and nearest region
+#    Find regions with: fly platform regions
+
+# 5. Create the app on Fly
+fly apps create your-app-name
+
+# 6. Deploy
 fly deploy
 
-# 5. Connect to your live site
+# 7. Connect to your live site
 ssh your-app-name.fly.dev
 ```
 
