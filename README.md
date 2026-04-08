@@ -11,7 +11,7 @@ Built with Go and the [Charmbracelet](https://charm.sh) stack (Bubbletea, Lip Gl
 git clone https://github.com/yourusername/tui-portfolio-builder.git
 cd tui-portfolio-builder
 
-# 2. Edit portfolio/portfolio.go with your own content (see below)
+# 2. Edit the portfolio/ folder with your own content (see below)
 
 # 3. Run it
 go run .
@@ -19,22 +19,22 @@ go run .
 
 ## Make it yours
 
-**The only file you need to edit is [`portfolio/portfolio.go`](portfolio/portfolio.go).**
+**Everything you need to edit is in the [`portfolio/`](portfolio/) folder:**
 
-Open it up and replace the content with your own:
+| File / Field       | What to change                                                |
+|--------------------|---------------------------------------------------------------|
+| `portrait.txt`     | Your ASCII art photo (see generation instructions below)      |
+| `name.txt`         | Your stylised name (see generation instructions below)        |
+| `RoleLines`        | Your headline intro (e.g. "is a software engineer at ...")    |
+| `CurrentWork`      | What you're working on now                                    |
+| `BackgroundParas`  | Education, past experience, extra context                     |
+| `Creations`        | Your projects — each has a Name, Subheading, and Desc         |
+| `Facts`            | Fun facts about you — one bullet point per string             |
+| `Links`            | Your contact links — each has a Label (e.g. "GH") and Value  |
+| `AccentColor`      | Your highlight color (pick from the 256-color palette)        |
+| `DimColor`         | A muted version of your accent color                          |
 
-| Section        | What to change                                                |
-|----------------|---------------------------------------------------------------|
-| `Portrait`     | Your ASCII art photo (see generation instructions below)      |
-| `NameArt`      | Your stylised name (see generation instructions below)        |
-| `RoleLines`    | Your headline intro (e.g. "is a software engineer at ...")    |
-| `CurrentWork`  | What you're working on now                                    |
-| `BackgroundParas` | Education, past experience, extra context                  |
-| `Creations`    | Your projects — each has a Name, Subheading, and Desc         |
-| `Facts`        | Fun facts about you — one bullet point per string             |
-| `Links`        | Your contact links — each has a Label (e.g. "GH") and Value  |
-| `AccentColor`  | Your highlight color (pick from the 256-color palette)        |
-| `DimColor`     | A muted version of your accent color                          |
+The text fields (`RoleLines`, `CurrentWork`, etc.) are in [`portfolio/portfolio.go`](portfolio/portfolio.go).
 
 ### Generate your ASCII art
 
@@ -42,10 +42,10 @@ Open it up and replace the content with your own:
 
 ```bash
 # Install: https://github.com/TheZoraworski/ascii-image-converter
-ascii-image-converter path/to/your-photo.jpg -W 60 -b
+ascii-image-converter portfolio/assets/your-photo.jpg -W 60 -b
 ```
 
-Copy the output and paste it into the `Portrait` field.
+Paste the output into [`portfolio/portrait.txt`](portfolio/portrait.txt).
 
 **Name art** (the big stylised name at the top):
 
@@ -54,7 +54,7 @@ Copy the output and paste it into the `Portrait` field.
 figlet -f slant "yourname"
 ```
 
-Copy the output and paste it into the `NameArt` field.
+Paste the output into [`portfolio/name.txt`](portfolio/name.txt).
 
 ### Pick your colors
 
@@ -78,11 +78,14 @@ for i in {0..255}; do printf "\e[38;5;${i}m %3d \e[0m" $i; done; echo
 ## Project structure
 
 ```
-portfolio/portfolio.go   <-- YOUR CONTENT (edit this)
+portfolio/
+  portfolio.go           <-- your bio, projects, facts, links, colors
+  portrait.txt           <-- your ASCII art photo (just paste it in)
+  name.txt               <-- your figlet name art (just paste it in)
+  assets/        <-- place your photo here for ASCII conversion
 main.go                  <-- entrypoint
 internal/ui/             <-- TUI views and layout (you don't need to touch this)
 internal/server/         <-- SSH server setup
-docs/assets/             <-- place your photo here for ASCII conversion
 ```
 
 ## Commands
