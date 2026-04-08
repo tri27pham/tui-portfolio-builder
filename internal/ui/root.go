@@ -175,6 +175,7 @@ func (m Root) View() string {
 func (m Root) activeView() string {
 	switch m.currentView {
 	case viewAbout:
+		m.about.width = m.navWidth
 		return m.about.View()
 	case viewCreations:
 		m.creations.width = m.navWidth
